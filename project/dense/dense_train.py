@@ -2,8 +2,8 @@ import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
 
-checkpoint_dir = "weights/"
-results_folder = "results/dense/"
+dense_checkpoint_dir = "weights/dense/"
+dense_results_dir = "results/dense/"
 
 
 def dense_train(x_train, y_train, learning_rate, num_epochs, batch_size, checkpoint_frequency=10, num_models=200):
@@ -55,13 +55,13 @@ def dense_train(x_train, y_train, learning_rate, num_epochs, batch_size, checkpo
             training_losses.append(training_loss)
 
             if epoch_iteration % checkpoint_frequency == 0:
-                checkpoint = checkpoint_dir + f"dense_epoch_{epoch_iteration}.ckpt"
+                checkpoint = dense_checkpoint_dir + f"dense_epoch_{epoch_iteration}.ckpt"
                 saver.save(sess, checkpoint)
         sess.close()
     plt.title("Training Loss:")
     plt.ylabel("Loss")
     plt.xlabel("Epoch Iteration")
     plt.plot(training_losses)
-    plt.savefig(results_folder + "training_loss.png")
+    plt.savefig(dense_results_dir + "training_loss.png")
     plt.show()
     return

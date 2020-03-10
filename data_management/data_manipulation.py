@@ -1,6 +1,5 @@
 from mnist import MNIST
 import numpy as np
-import matplotlib.pyplot as plt
 
 MNIST_dir = "data_management/dataset/"
 np_save_dir = "data_management/np_dataset/"

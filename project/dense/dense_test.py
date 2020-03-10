@@ -1,6 +1,6 @@
 import tensorflow as tf
 import numpy as np
-from project.dense.dense_train import checkpoint_dir, results_folder
+from project.dense.dense_train import dense_checkpoint_dir, dense_results_dir
 
 
 def dense_test(x_test, y_test, checkpoint_file):
@@ -30,7 +30,7 @@ def dense_test(x_test, y_test, checkpoint_file):
 
     # For weight saving:
     saver = tf.train.Saver()
-    checkpoint = checkpoint_dir + checkpoint_file
+    checkpoint = dense_checkpoint_dir + checkpoint_file
 
     with tf.Session() as sess:
         saver.restore(sess, checkpoint)
