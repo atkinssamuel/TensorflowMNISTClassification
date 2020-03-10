@@ -1,9 +1,9 @@
 import tensorflow as tf
 import numpy as np
-from project.train import checkpoint_dir, results_folder
-import matplotlib.pyplot as plt
+from project.dense.dense_train import checkpoint_dir, results_folder
 
-def test(x_test, y_test, checkpoint_file):
+
+def dense_test(x_test, y_test, checkpoint_file):
     # Parameters:
     input_nodes = np.shape(x_test)[1]
     hidden_layer_1 = 32

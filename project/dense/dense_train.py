@@ -6,7 +6,7 @@ checkpoint_dir = "weights/"
 results_folder = "results/"
 
 
-def train(x_train, y_train, learning_rate, num_epochs, batch_size, checkpoint_frequency=10, num_models=200):
+def dense_train(x_train, y_train, learning_rate, num_epochs, batch_size, checkpoint_frequency=10, num_models=200):
     # Parameters:
     input_nodes = np.shape(x_train)[1]
     hidden_layer_1 = 32

@@ -1,6 +1,8 @@
 from data_management.data_manipulation import import_MNIST, load_MNIST, load_MNIST_flat
-from project.train import train
-from project.test import test
+from project.dense.dense_train import dense_train
+from project.dense.dense_test import dense_test
+from project.convolutional.convolutional_train import convolutional_train
+from project.convolutional.convolutional_test import convolutional_test
 
 
 if __name__ == "__main__":
