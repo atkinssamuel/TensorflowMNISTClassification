@@ -2,3 +2,4 @@
 data_management/dataset
 data_management/__pycache__/
 data_management/np_dataset/
+project/__pycache__/
