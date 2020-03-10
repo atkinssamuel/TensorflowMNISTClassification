@@ -45,8 +45,8 @@ def load_MNIST():
     x_test = np.load(np_save_dir + "x_test.npy")
     y_test = np.load(np_save_dir + "y_test.npy")
 
-    x_train = x_train.reshape((np.shape(x_train)[0], image_dim, image_dim))
-    x_test = x_test.reshape((np.shape(x_test)[0], image_dim, image_dim))
+    x_train = x_train.reshape((np.shape(x_train)[0], image_dim, image_dim, 1))
+    x_test = x_test.reshape((np.shape(x_test)[0], image_dim, image_dim, 1))
 
     return (x_train, y_train), (x_test, y_test)
 

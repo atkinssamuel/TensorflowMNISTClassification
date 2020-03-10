@@ -21,16 +21,17 @@ def dense(_train):
     else:
         dense_test(x_test, y_test, checkpoint_file)
 
+
 def conv(_train):
-    (x_train, y_train), (x_test, y_test) = load_MNIST_flat()
+    (x_train, y_train), (x_test, y_test) = load_MNIST()
 
     # Training Parameters:
     learning_rate = 0.001
-    num_epochs = 500
+    num_epochs = 5
     num_models = 10
     batch_size = 64
     # Testing Parameters:
-    checkpoint_file = "dense_epoch_90.ckpt"
+    checkpoint_file = "conv_epoch_90.ckpt"
     if _train:
         conv_train(x_train, y_train, learning_rate, num_epochs, batch_size, checkpoint_frequency=10,
                     num_models=num_models)
@@ -40,4 +41,6 @@ def conv(_train):
 
 if __name__ == "__main__":
     _train = 1
-    dense(_train)
+    (x_train, y_train), (x_test, y_test) = load_MNIST()
+    conv(_train)
+

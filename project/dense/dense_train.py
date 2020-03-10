@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 checkpoint_dir = "weights/"
-results_folder = "results/"
+results_folder = "results/dense/"
 
 
 def dense_train(x_train, y_train, learning_rate, num_epochs, batch_size, checkpoint_frequency=10, num_models=200):
