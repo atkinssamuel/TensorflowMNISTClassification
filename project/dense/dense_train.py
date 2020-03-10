@@ -55,7 +55,7 @@ def dense_train(x_train, y_train, learning_rate, num_epochs, batch_size, checkpo
             training_losses.append(training_loss)
 
             if epoch_iteration % checkpoint_frequency == 0:
-                checkpoint = checkpoint_dir + f"epoch_{epoch_iteration}.ckpt"
+                checkpoint = checkpoint_dir + f"dense_epoch_{epoch_iteration}.ckpt"
                 saver.save(sess, checkpoint)
         sess.close()
     plt.title("Training Loss:")
