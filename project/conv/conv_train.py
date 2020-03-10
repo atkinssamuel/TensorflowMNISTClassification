@@ -14,25 +14,24 @@ def conv_train(x_train, y_train, learning_rate, num_epochs, batch_size, checkpoi
     input_depth = 1
     # Conv Layer 1:
     # Input: None x 28 x 28 x 1
-    layer_1_depth = 3
-    k1_width = 3
+    layer_1_depth = 6
+    k1_width = 5
     stride_1 = 1
     padding_1 = "SAME"
     # Conv Layer 2:
-    # Input: None x 28 x 28 x 3
-    layer_2_depth = 6
-    k2_width = 5
-    stride_2 = 2
+    # Input: None x 28 x 28 x 6
+    layer_2_depth = 18
+    k2_width = 7
+    stride_2 = 1
     padding_2 = "SAME"
-    # Output: None x 14 x 14 x 6
+    # Output: None x 28 x 28 x 18
     # Pooling Layer 2:
-    # Output: None x 7 x 7 x 6
-    conv_output_nodes = 14 * 14 * 6
-
+    # Output: None x 14 x 14 x 18
+    conv_output_nodes = 7 * 7 * 18
 
     # Fully Connected:
     increase_factor = 1.5
-    hidden_layer_3 = 32
+    hidden_layer_3 = round(conv_output_nodes * increase_factor)
     hidden_layer_4 = round(hidden_layer_3 * increase_factor)
     output_layer = 10
 
@@ -44,12 +43,12 @@ def conv_train(x_train, y_train, learning_rate, num_epochs, batch_size, checkpoi
     # [filter_height, filter_width, in_channels, out_channels]
     # Conv-Pool:
     k1 = tf.Variable(tf.random_normal([k1_width, k1_width, input_depth, layer_1_depth]))
-    y1 = tf.nn.relu(tf.nn.conv2d(x, k1, [stride_1], padding_1))
-    y1 = tf.nn.pool(y1, [2, 2], pooling_type="MAX", padding="SAME")
+    y1 = tf.nn.leaky_relu(tf.nn.conv2d(x, k1, [stride_1], padding_1))
+    y1 = tf.nn.pool(y1, [2, 2], pooling_type="MAX", padding="SAME", strides=[2, 2])
     # Conv-Pool:
     k2 = tf.Variable(tf.random_normal([k2_width, k2_width, layer_1_depth, layer_2_depth]))
-    y2 = tf.nn.relu(tf.nn.conv2d(y1, k2, [stride_2], padding_2))
-    y2 = tf.nn.pool(y2, [2, 2], pooling_type="MAX", padding="SAME")
+    y2 = tf.nn.leaky_relu(tf.nn.conv2d(y1, k2, [stride_2], padding_2))
+    y2 = tf.nn.pool(y2, [2, 2], pooling_type="MAX", padding="SAME", strides=[2, 2])
     y2 = tf.reshape(y2, [-1, conv_output_nodes])
 
     # Layer 3 variables:
@@ -59,7 +58,7 @@ def conv_train(x_train, y_train, learning_rate, num_epochs, batch_size, checkpoi
     # Layer 4 variables:
     W4 = tf.Variable(tf.truncated_normal([hidden_layer_3, hidden_layer_4], stddev=0.15))
     b4 = tf.Variable(tf.zeros([hidden_layer_4]))
-    y4 = tf.matmul(y3, W4) + b4
+    y4 = tf.math.sigmoid(tf.matmul(y3, W4) + b4)
     # Layer 5 Variables:
     W5 = tf.Variable(tf.truncated_normal([hidden_layer_4, output_layer], stddev=0.15))
     b5 = tf.Variable(tf.zeros([output_layer]))
@@ -75,6 +74,7 @@ def conv_train(x_train, y_train, learning_rate, num_epochs, batch_size, checkpoi
     saver = tf.train.Saver(max_to_keep=num_models)
 
     training_losses = []
+    training_accuracies = []
 
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
@@ -87,15 +87,30 @@ def conv_train(x_train, y_train, learning_rate, num_epochs, batch_size, checkpoi
             training_output = sess.run([y], feed_dict={x: x_train, y_: y_train})[0]
             training_loss = np.sum(np.square(training_output - y_train) / np.shape(training_output)[0])
             training_losses.append(training_loss)
+            training_predictions = np.argmax(training_output, axis=1)
+            training_targets = np.argmax(y_train, axis=1)
+            training_accuracy = round(np.sum(np.equal(training_predictions, training_targets)) \
+                                / training_predictions.shape[0] * 100, 2)
+            training_accuracies.append(training_accuracy)
+            print(f"Current Epoch = {epoch_iteration}, Training Loss = {round(training_loss, 4)}, "
+                  f"Training Accuracy = {training_accuracy}%, {round(epoch_iteration / num_epochs * 100, 2)}% Complete")
 
             if epoch_iteration % checkpoint_frequency == 0:
                 checkpoint = conv_checkpoint_dir + f"conv_epoch_{epoch_iteration}.ckpt"
                 saver.save(sess, checkpoint)
         sess.close()
+    # Loss Plotting:
     plt.title("Training Loss:")
     plt.ylabel("Loss")
     plt.xlabel("Epoch Iteration")
     plt.plot(training_losses)
     plt.savefig(results_folder + "training_loss.png")
+    plt.show()
+    # Accuracy Plotting:
+    plt.title("Training Accuracy:")
+    plt.ylabel("Accuracy %")
+    plt.xlabel("Epoch Iteration")
+    plt.plot(training_accuracies)
+    plt.savefig(results_folder + "training_accuracy.png")
     plt.show()
     return
