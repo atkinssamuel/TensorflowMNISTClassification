@@ -1,7 +1,5 @@
-.idea/
+.idea
 data_management/dataset
-data_management/__pycache__/
 data_management/np_dataset/
-project/__pycache__/weights
-project/__pycache__/
 weights
+__pycache__
