@@ -5,13 +5,12 @@ import matplotlib.pyplot as plt
 checkpoint_dir = "weights/"
 results_folder = "results/"
 
-def train(x_train, y_train, learning_rate, num_epochs, batch_size, checkpoint_frequency=10, num_models=200):
-    y_train = y_train.reshape((np.shape(y_train)[0], 1))
 
+def train(x_train, y_train, learning_rate, num_epochs, batch_size, checkpoint_frequency=10, num_models=200):
     # Parameters:
     input_nodes = np.shape(x_train)[1]
     hidden_layer_1 = 32
-    hidden_layer_2 = 1
+    output_layer = 10
 
     # Defining Layers:
     # Placeholder for batch of inputs:
@@ -21,11 +20,11 @@ def train(x_train, y_train, learning_rate, num_epochs, batch_size, checkpoint_fr
     b1 = tf.Variable(tf.zeros([hidden_layer_1]))
     y1 = tf.math.sigmoid(tf.matmul(x, W1) + b1)
     # layer 2 variables:
-    W2 = tf.Variable(tf.truncated_normal([hidden_layer_1, hidden_layer_2], stddev=0.15))
-    b2 = tf.Variable(tf.zeros([hidden_layer_2]))
+    W2 = tf.Variable(tf.truncated_normal([hidden_layer_1, output_layer], stddev=0.15))
+    b2 = tf.Variable(tf.zeros([output_layer]))
     y = tf.matmul(y1, W2) + b2
     # Placeholder for batch of targets:
-    y_ = tf.placeholder(tf.float32, [None, 1])
+    y_ = tf.placeholder(tf.float32, [None, output_layer])
 
     cost = tf.reduce_sum(tf.math.square(y - y_))
     optimizer = tf.train.AdamOptimizer(learning_rate).minimize(cost)
@@ -53,9 +52,7 @@ def train(x_train, y_train, learning_rate, num_epochs, batch_size, checkpoint_fr
             if epoch_iteration % checkpoint_frequency == 0:
                 checkpoint = checkpoint_dir + f"epoch_{epoch_iteration}.ckpt"
                 saver.save(sess, checkpoint)
-
         sess.close()
-
     plt.title("Training Loss:")
     plt.ylabel("Loss")
     plt.xlabel("Epoch Iteration")

@@ -9,7 +9,7 @@ if __name__ == "__main__":
 
     # Training Parameters:
     learning_rate = 0.001
-    num_epochs = 3
+    num_epochs = 100
     num_models = 10
     batch_size = 64
     # Testing Parameters:

@@ -18,15 +18,27 @@ def import_MNIST():
     x_test = np.array(x_test)
     y_test = np.array(y_test)
 
+    # Encoding outputs:
+    y_train_categorical = np.zeros((y_train.shape[0], 10))
+    y_test_categorical = np.zeros((y_test.shape[0], 10))
+
+    for i in range(y_train_categorical.shape[0]):
+        j = y_train[i]
+        y_train_categorical[i, j] = 1
+        if i < y_test_categorical.shape[0]:
+            k = y_test[i]
+            y_test_categorical[i, k] = 1
+
     np.save(np_save_dir + 'x_train', x_train)
-    np.save(np_save_dir + 'y_train', y_train)
+    np.save(np_save_dir + 'y_train', y_train_categorical)
     np.save(np_save_dir + 'x_test', x_test)
-    np.save(np_save_dir + 'y_test', y_test)
+    np.save(np_save_dir + 'y_test', y_test_categorical)
     return
 
 
 def load_MNIST():
     image_dim = 28
+    num_categories = 10
 
     x_train = np.load(np_save_dir + "x_train.npy")
     y_train = np.load(np_save_dir + "y_train.npy")
