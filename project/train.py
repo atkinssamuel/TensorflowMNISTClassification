@@ -10,6 +10,7 @@ def train(x_train, y_train, learning_rate, num_epochs, batch_size, checkpoint_fr
     # Parameters:
     input_nodes = np.shape(x_train)[1]
     hidden_layer_1 = 32
+    hidden_layer_2 = 64
     output_layer = 10
 
     # Defining Layers:
@@ -19,10 +20,14 @@ def train(x_train, y_train, learning_rate, num_epochs, batch_size, checkpoint_fr
     W1 = tf.Variable(tf.truncated_normal([input_nodes, hidden_layer_1], stddev=0.15))
     b1 = tf.Variable(tf.zeros([hidden_layer_1]))
     y1 = tf.math.sigmoid(tf.matmul(x, W1) + b1)
-    # layer 2 variables:
-    W2 = tf.Variable(tf.truncated_normal([hidden_layer_1, output_layer], stddev=0.15))
-    b2 = tf.Variable(tf.zeros([output_layer]))
-    y = tf.matmul(y1, W2) + b2
+    # Layer 2 variables:
+    W2 = tf.Variable(tf.truncated_normal([hidden_layer_1, hidden_layer_2], stddev=0.15))
+    b2 = tf.Variable(tf.zeros([hidden_layer_2]))
+    y2 = tf.matmul(y1, W2) + b2
+    # Layer 3 variables:
+    W3 = tf.Variable(tf.truncated_normal([hidden_layer_2, output_layer], stddev=0.15))
+    b3 = tf.Variable(tf.zeros([output_layer]))
+    y = tf.matmul(y2, W3) + b3
     # Placeholder for batch of targets:
     y_ = tf.placeholder(tf.float32, [None, output_layer])
 
