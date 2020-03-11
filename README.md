@@ -1,6 +1,8 @@
 ## Tensorflow MNIST Classification
 This repository includes a Tensorflow 1.14.0 MLP applied to the standard MNIST dataset. There are two types of models that were implemented in this repository, a fully-connected model and a convolutional model followed by a fully-connected model. Given that the MNIST dataset is an image classification dataset, we expect the convolutional model to produce stronger results. Convolutional layers are able to recognize the spatial locality of image features. Also, these layers are able to take advantage of weight sharing through the use of lightweight kernel objects. 
 
+Unfortunately, due to computational limitations, my device does not support deep feature maps. Therefore, it is likely that the testing accuracy produced by the convolutional network is similar to the fully-connected network.
+
 ## Fully-Connected Model
 This model has 3 dense layers. The first two layers are followed by sigmoid activation functions. The final layer uses softmax activation. The cost function used for this network is cross-entropy loss. The code snippet, below, details the size of each of the dense layers:
 
@@ -13,7 +15,7 @@ hidden_layer_2 = round(hidden_layer_1 * increase_factor) # hidden_layer_2 = 28 *
 output_layer = 10
 ```
 
-## Fully-Connected Results:
+## Fully-Connected Results
 The training loss curve corresponding to the fully-connected model is shown in this Figure:
 
 ![](results/dense/training_loss.png)
@@ -89,7 +91,7 @@ num_epochs = 50
 batch_size = 512
 ```
 
-### Convolutional Results:
+### Convolutional Results
 The following Figure delineates the training loss curve for the model described in the previous section:
 
 ![](results/conv/training_loss.png)
@@ -102,8 +104,19 @@ The curve is smooth and has negligible instability. The following Figure illustr
 
 *Figure 4: Convolutional training accuracy plot*
 
-This curve, like the loss curve, follows the expected trajectory. This model was able to achieve a testing accuracy of _%. This is significantly higher than the testing accuracy of 97.2% achieved by the fully-connected model. 
+This curve, like the loss curve, follows the expected trajectory. This model was able to achieve a testing accuracy of 96.1%. 
 
+### Duplication Instructions
+1. Clone repository
+2. Ensure that your environment has tensorflow==1.14.0
+3. Create the following directories:
+    - weights/
+    - weights/conv
+    - weights/dense
+    - data_management/np_dataset
+4. Use the data_management folder to import the MNIST data into .npy files
+5. Modify the main.py code to run the training and testing functions for the fully-connected and convolutional networks
 
-Convolutional layer guide: https://stackoverflow.com/questions/34619177/what-does-tf-nn-conv2d-do-in-tensorflow
-The dataset is publically avaialble here: http://yann.lecun.com/exdb/mnist/
+### Miscellaneous
+Convolutional layer guide: https://stackoverflow.com/questions/34619177/what-does-tf-nn-conv2d-do-in-tensorflow  
+The MNIST dataset is publically avaialble here: http://yann.lecun.com/exdb/mnist/
