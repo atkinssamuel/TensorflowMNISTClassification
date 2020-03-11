@@ -102,7 +102,7 @@ The curve is smooth and has negligible instability. The following Figure illustr
 
 *Figure 4: Convolutional training accuracy plot*
 
-This curve, like the loss curve, follows the expected trajectory. This model was able to achieve a testing accuracy of 96.1%. This is significantly higher than the testing accuracy of 97.2% achieved by the fully-connected model. 
+This curve, like the loss curve, follows the expected trajectory. This model was able to achieve a testing accuracy of _%. This is significantly higher than the testing accuracy of 97.2% achieved by the fully-connected model. 
 
 
 Convolutional layer guide: https://stackoverflow.com/questions/34619177/what-does-tf-nn-conv2d-do-in-tensorflow
