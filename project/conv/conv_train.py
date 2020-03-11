@@ -36,7 +36,7 @@ def conv_train(x_train, y_train, learning_rate, num_epochs, batch_size, checkpoi
     output_layer = 10
 
     # Defining Layers:
-    # Defining Placehodlers:
+    # Defining Placeholders:
     x = tf.placeholder(tf.float32, [None, image_dim, image_dim, input_depth])
     y_ = tf.placeholder(tf.float32, [None, categories])
 
@@ -99,6 +99,7 @@ def conv_train(x_train, y_train, learning_rate, num_epochs, batch_size, checkpoi
                 checkpoint = conv_checkpoint_dir + f"conv_epoch_{epoch_iteration}.ckpt"
                 saver.save(sess, checkpoint)
         sess.close()
+
     # Loss Plotting:
     plt.title("Training Loss:")
     plt.ylabel("Loss")
@@ -110,7 +111,7 @@ def conv_train(x_train, y_train, learning_rate, num_epochs, batch_size, checkpoi
     plt.title("Training Accuracy:")
     plt.ylabel("Accuracy %")
     plt.xlabel("Epoch Iteration")
-    plt.plot(training_accuracies)
+    plt.plot(training_accuracies, "g")
     plt.savefig(results_folder + "training_accuracy.png")
     plt.show()
     return

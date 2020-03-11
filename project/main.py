@@ -26,12 +26,12 @@ def conv(_train, x_train, y_train, x_test, y_test):
 
     # Training Parameters:
     learning_rate = 0.001
-    num_epochs = 200
-    num_models = 10
+    num_epochs = 50
+    num_models = 100
     batch_size = 256
     checkpoint_frequency = 2
     # Testing Parameters:
-    checkpoint_file = "conv_epoch_90.ckpt"
+    checkpoint_file = "conv_epoch_180.ckpt"
     if _train:
         conv_train(x_train, y_train, learning_rate, num_epochs, batch_size, checkpoint_frequency=checkpoint_frequency,
                     num_models=num_models)
@@ -42,6 +42,5 @@ def conv(_train, x_train, y_train, x_test, y_test):
 if __name__ == "__main__":
     _train = 1
     (x_train, y_train), (x_test, y_test) = load_MNIST()
-    (x_train, y_train), (x_test, y_test) = (x_train[:1000], y_train[:1000]), (x_test, y_test)
     conv(_train, x_train, y_train, x_test, y_test)
 
