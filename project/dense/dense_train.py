@@ -35,7 +35,7 @@ def dense_train(x_train, y_train, learning_rate, num_epochs, batch_size, checkpo
     # Placeholder for batch of targets:
     y_ = tf.placeholder(tf.float32, [None, output_layer])
 
-    cost = tf.reduce_sum(tf.math.square(y - y_))
+    cost = tf.nn.softmax_cross_entropy_with_logits(labels=y_, logits=y)
     optimizer = tf.train.AdamOptimizer(learning_rate).minimize(cost)
 
     # Miscellaneous quantities:
@@ -45,6 +45,7 @@ def dense_train(x_train, y_train, learning_rate, num_epochs, batch_size, checkpo
     saver = tf.train.Saver(max_to_keep=num_models)
 
     training_losses = []
+    training_accuracies = []
 
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
@@ -53,19 +54,34 @@ def dense_train(x_train, y_train, learning_rate, num_epochs, batch_size, checkpo
                 batch_x = x_train[batch * batch_size: (1 + batch) * batch_size]
                 batch_y = y_train[batch * batch_size: (1 + batch) * batch_size]
                 # Instantiating the inputs and targets with the batch values:
-                sess.run([optimizer], feed_dict={x: batch_x, y_: batch_y})
-            training_output = sess.run([y], feed_dict={x: x_train, y_: y_train})[0]
-            training_loss = np.sum(np.square(training_output - y_train) / np.shape(training_output)[0])
+                output = np.array(sess.run([optimizer], feed_dict={x: batch_x, y_: batch_y}))
+            training_output, training_loss = sess.run([y, cost], feed_dict={x: x_train, y_: y_train})
+            training_loss = np.mean(training_loss)
             training_losses.append(training_loss)
+            training_predictions = np.argmax(training_output, axis=1)
+            training_targets = np.argmax(y_train, axis=1)
+            training_accuracy = round(np.sum(np.equal(training_predictions, training_targets)) \
+                                      / training_predictions.shape[0] * 100, 2)
+            training_accuracies.append(training_accuracy)
+            print(f"Current Epoch = {epoch_iteration}, Training Loss = {training_loss}, "
+                  f"Training Accuracy = {training_accuracy}%, {round(epoch_iteration / num_epochs * 100, 2)}% Complete")
 
             if epoch_iteration % checkpoint_frequency == 0:
                 checkpoint = dense_checkpoint_dir + f"dense_epoch_{epoch_iteration}.ckpt"
                 saver.save(sess, checkpoint)
         sess.close()
+    # Loss Plotting:
     plt.title("Training Loss:")
     plt.ylabel("Loss")
     plt.xlabel("Epoch Iteration")
     plt.plot(training_losses)
     plt.savefig(dense_results_dir + "training_loss.png")
+    plt.show()
+    # Accuracy Plotting:
+    plt.title("Training Accuracy:")
+    plt.ylabel("Accuracy %")
+    plt.xlabel("Epoch Iteration")
+    plt.plot(training_accuracies, "g")
+    plt.savefig(dense_results_dir + "training_accuracy.png")
     plt.show()
     return

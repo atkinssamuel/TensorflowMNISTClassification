@@ -6,8 +6,11 @@ from project.dense.dense_train import dense_checkpoint_dir, dense_results_dir
 def dense_test(x_test, y_test, checkpoint_file):
     # Parameters:
     input_nodes = np.shape(x_test)[1]
-    hidden_layer_1 = 32
-    hidden_layer_2 = 64
+
+    # Fully Connected:
+    increase_factor = 1.5
+    hidden_layer_1 = round(input_nodes * increase_factor)
+    hidden_layer_2 = round(hidden_layer_1 * increase_factor)
     output_layer = 10
 
     # Defining Layers:
@@ -20,7 +23,7 @@ def dense_test(x_test, y_test, checkpoint_file):
     # Layer 2 variables:
     W2 = tf.Variable(tf.truncated_normal([hidden_layer_1, hidden_layer_2], stddev=0.15))
     b2 = tf.Variable(tf.zeros([hidden_layer_2]))
-    y2 = tf.matmul(y1, W2) + b2
+    y2 = tf.math.sigmoid(tf.matmul(y1, W2) + b2)
     # Layer 3 variables:
     W3 = tf.Variable(tf.truncated_normal([hidden_layer_2, output_layer], stddev=0.15))
     b3 = tf.Variable(tf.zeros([output_layer]))

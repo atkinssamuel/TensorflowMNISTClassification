@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 conv_checkpoint_dir = "weights/conv/"
-results_folder = "results/conv/"
+conv_results_folder = "results/conv/"
 
 
 
@@ -108,13 +108,13 @@ def conv_train(x_train, y_train, learning_rate, num_epochs, batch_size, checkpoi
     plt.ylabel("Loss")
     plt.xlabel("Epoch Iteration")
     plt.plot(training_losses)
-    plt.savefig(results_folder + "training_loss.png")
+    plt.savefig(conv_results_folder + "training_loss.png")
     plt.show()
     # Accuracy Plotting:
     plt.title("Training Accuracy:")
     plt.ylabel("Accuracy %")
     plt.xlabel("Epoch Iteration")
     plt.plot(training_accuracies, "g")
-    plt.savefig(results_folder + "training_accuracy.png")
+    plt.savefig(conv_results_folder + "training_accuracy.png")
     plt.show()
     return

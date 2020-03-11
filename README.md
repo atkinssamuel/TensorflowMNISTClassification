@@ -26,6 +26,8 @@ The training curve is relatively smooth and shows little stability. This confirm
 
 *Figure 2: Fully-connected training accuracy plot*
 
+The fully-connected model achieved a testing accuracy of 97.2%. 
+
 ## Convolutional Model
 This model begins with two convolutional-pooling layers followed by three fully-connected layers. The Leaky-ReLU activation function is applied to the output of each convolutional layer and immediately followed by max-pooling. The parameters used for all 5 layers are illustrated by the code snippet, below:
 
@@ -100,7 +102,7 @@ The curve is smooth and has negligible instability. The following Figure illustr
 
 *Figure 4: Convolutional training accuracy plot*
 
-This curve, like the loss curve, follows the expected trajectory. This model was able to achieve a testing accuracy of _%. This is significantly higher than the testing accuracy of _% achieved by the fully-connected model. 
+This curve, like the loss curve, follows the expected trajectory. This model was able to achieve a testing accuracy of 96.1%. This is significantly higher than the testing accuracy of 97.2% achieved by the fully-connected model. 
 
 
 Convolutional layer guide: https://stackoverflow.com/questions/34619177/what-does-tf-nn-conv2d-do-in-tensorflow

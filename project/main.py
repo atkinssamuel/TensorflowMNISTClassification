@@ -5,18 +5,17 @@ from project.conv.conv_train import conv_train
 from project.conv.conv_test import conv_test
 
 
-def dense(_train):
-    (x_train, y_train), (x_test, y_test) = load_MNIST_flat()
-
+def dense(_train, x_train, y_train, x_test, y_test):
     # Training Parameters:
     learning_rate = 0.001
-    num_epochs = 20
-    num_models = 10
-    batch_size = 64
+    num_epochs = 50
+    num_models = 50
+    batch_size = 512
+    checkpoint_frequency = 2
     # Testing Parameters:
-    checkpoint_file = "epoch_90.ckpt"
+    checkpoint_file = "conv_epoch_40.ckpt"
     if _train:
-        dense_train(x_train, y_train, learning_rate, num_epochs, batch_size, checkpoint_frequency=10,
+        dense_train(x_train, y_train, learning_rate, num_epochs, batch_size, checkpoint_frequency=checkpoint_frequency,
                     num_models=num_models)
     else:
         dense_test(x_test, y_test, checkpoint_file)
@@ -31,7 +30,7 @@ def conv(_train, x_train, y_train, x_test, y_test):
     batch_size = 512
     checkpoint_frequency = 2
     # Testing Parameters:
-    checkpoint_file = "conv_epoch_180.ckpt"
+    checkpoint_file = "conv_epoch_48.ckpt"
     if _train:
         conv_train(x_train, y_train, learning_rate, num_epochs, batch_size, checkpoint_frequency=checkpoint_frequency,
                     num_models=num_models)
@@ -40,8 +39,8 @@ def conv(_train, x_train, y_train, x_test, y_test):
 
 
 if __name__ == "__main__":
-    _train = 1
-    (x_train, y_train), (x_test, y_test) = load_MNIST()
+    _train = 0
+    (x_train, y_train), (x_test, y_test) = load_MNIST_flat()
     (x_train, y_train), (x_test, y_test) = (x_train, y_train), (x_test, y_test)
-    conv(_train, x_train, y_train, x_test, y_test)
+    dense(_train, x_train, y_train, x_test, y_test)
 
