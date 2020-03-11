@@ -6,27 +6,30 @@ conv_checkpoint_dir = "weights/conv/"
 results_folder = "results/conv/"
 
 
+
+def cross_entropy(p, q):
+	return -sum([p[i] * np.log(q[i]) for i in range(len(p))])
+
+
 def conv_train(x_train, y_train, learning_rate, num_epochs, batch_size, checkpoint_frequency=10, num_models=200):
     # Parameters:
     # Base Params:
     categories = 10
     image_dim = 28
     input_depth = 1
-    # Conv Layer 1:
+    # Conv-Pooling Layer 1:
     # Input: None x 28 x 28 x 1
     layer_1_depth = 6
     k1_width = 5
     stride_1 = 1
     padding_1 = "SAME"
-    # Conv Layer 2:
-    # Input: None x 28 x 28 x 6
+    # Conv-Pooling Layer 2:
+    # Input: None x 14 x 14 x 6
     layer_2_depth = 18
     k2_width = 7
     stride_2 = 1
     padding_2 = "SAME"
-    # Output: None x 28 x 28 x 18
-    # Pooling Layer 2:
-    # Output: None x 14 x 14 x 18
+    # Output: None x 7 x 7 x 18
     conv_output_nodes = 7 * 7 * 18
 
     # Fully Connected:
@@ -64,7 +67,7 @@ def conv_train(x_train, y_train, learning_rate, num_epochs, batch_size, checkpoi
     b5 = tf.Variable(tf.zeros([output_layer]))
     y = tf.matmul(y4, W5) + b5
 
-    cost = tf.reduce_sum(tf.math.square(y - y_))
+    cost = tf.nn.softmax_cross_entropy_with_logits(labels=y_, logits=y)
     optimizer = tf.train.AdamOptimizer(learning_rate).minimize(cost)
 
     # Miscellaneous quantities:
@@ -84,15 +87,15 @@ def conv_train(x_train, y_train, learning_rate, num_epochs, batch_size, checkpoi
                 batch_y = y_train[batch * batch_size: (1 + batch) * batch_size]
                 # Instantiating the inputs and targets with the batch values:
                 output = np.array(sess.run([optimizer], feed_dict={x: batch_x, y_: batch_y}))
-            training_output = sess.run([y], feed_dict={x: x_train, y_: y_train})[0]
-            training_loss = np.sum(np.square(training_output - y_train) / np.shape(training_output)[0])
+            training_output, training_loss = sess.run([y, cost], feed_dict={x: x_train, y_: y_train})
+            training_loss = np.mean(training_loss)
             training_losses.append(training_loss)
             training_predictions = np.argmax(training_output, axis=1)
             training_targets = np.argmax(y_train, axis=1)
             training_accuracy = round(np.sum(np.equal(training_predictions, training_targets)) \
                                 / training_predictions.shape[0] * 100, 2)
             training_accuracies.append(training_accuracy)
-            print(f"Current Epoch = {epoch_iteration}, Training Loss = {round(training_loss, 4)}, "
+            print(f"Current Epoch = {epoch_iteration}, Training Loss = {training_loss}, "
                   f"Training Accuracy = {training_accuracy}%, {round(epoch_iteration / num_epochs * 100, 2)}% Complete")
 
             if epoch_iteration % checkpoint_frequency == 0:

@@ -9,9 +9,13 @@ dense_results_dir = "results/dense/"
 def dense_train(x_train, y_train, learning_rate, num_epochs, batch_size, checkpoint_frequency=10, num_models=200):
     # Parameters:
     input_nodes = np.shape(x_train)[1]
-    hidden_layer_1 = 32
-    hidden_layer_2 = 64
+
+    # Fully Connected:
+    increase_factor = 1.5
+    hidden_layer_1 = round(input_nodes * increase_factor)
+    hidden_layer_2 = round(hidden_layer_1 * increase_factor)
     output_layer = 10
+
 
     # Defining Layers:
     # Placeholder for batch of inputs:
